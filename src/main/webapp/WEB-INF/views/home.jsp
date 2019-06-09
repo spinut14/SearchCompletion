@@ -10,12 +10,20 @@
         $.ajax({
             url: '/completion/search',
             type: 'POST',
-            //contentType: 'application/json; charset=UTF-8',
+            // contentType: 'application/json; charset=UTF-8',
+            // contentType: 'application/x-www-form-urlencoded; charset=UTF-8',
             crossDomain: true,
             dataType: 'json',
             data: "schWord="+$('#schWord').val(),
             success: function(response) {
                 console.log(response);
+                var obj = JSON.stringify(response);
+                var objJson = JSON.parse(obj);
+                var list = objJson.rtnList;
+                for(var i=0; i<list.length; i++){
+                	console.log(list[i]);
+                }
+                
             },
             error: function(status){
             	console.log(status);
