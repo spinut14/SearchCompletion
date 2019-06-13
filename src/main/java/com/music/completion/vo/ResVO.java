@@ -1,18 +1,14 @@
 package com.music.completion.vo;
 
-import java.util.List;
-
 public class ResVO {
-	private Object rtnList;
+	private String musicTitle;
 
-	public Object getRtnList() {
-		return rtnList;
+	public String getMusicTitle() {
+		return musicTitle;
 	}
 
-	public void setRtnList(Object rtnList) {
-		this.rtnList = rtnList;
+	public void setMusicTitle(String musicTitle) {
+		this.musicTitle = musicTitle;
 	}
 
-	
-	
 }

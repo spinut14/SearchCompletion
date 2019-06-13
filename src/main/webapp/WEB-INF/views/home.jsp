@@ -1,11 +1,25 @@
-<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
-<%@ page session="false" language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
+<%@ page session="false" language="java"
+	contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <html>
 <head>
-	<title>Home</title>
-	 <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
-	<script>
-	function searchCompletion(){
+<title>Home</title>
+<link rel="stylesheet" href="http://code.jquery.com/ui/1.10.1/themes/base/jquery-ui.css" />
+<!-- <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script> -->
+<script src="https://code.jquery.com/jquery-1.12.4.js"></script>
+<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+
+<script>
+	/* Jquery autocomplete */
+	var availableWord = new Array();
+/*	$( function() {
+		$("#schWord").autocomplete({
+			source: availableWord
+		});
+	});
+*/
+	/* 검색어 조회 function */ 
+	/*function searchCompletion(){
 		var jsonStr = makeJsonString();
         $.ajax({
             url: '/completion/search',
@@ -20,16 +34,75 @@
                 var obj = JSON.stringify(response);
                 var objJson = JSON.parse(obj);
                 var list = objJson.rtnList;
+                if(availableWord.length > 0){
+                	delete availableWord[0];
+            	}
                 for(var i=0; i<list.length; i++){
                 	console.log(list[i]);
+                	availableWord.push(list[i]);
                 }
-                
+        		$("#schWord").autocomplete({
+        			source: availableWord
+        		});
             },
             error: function(status){
             	console.log(status);
             }
         });
-	}
+	}*/
+	$(function() {
+		$("#schWord").autocomplete({
+			source: function (request, response){
+				$.ajax({
+					url: '/completion/search',
+		            type: 'POST',
+		            dataType: 'json',
+		            data: "schWord="+$('#schWord').val(),
+		            success: function(data) {
+		                /*console.log(data);
+		                var obj = JSON.stringify(data);
+		                var objJson = JSON.parse(obj);
+		                var list = objJson.rtnList;
+		                if(availableWord.length > 0){
+		                	delete availableWord[0];
+		            	}*/
+		            	response(
+	            			$.map(data, function (item){
+	            				var obj = JSON.stringify(data);
+	    		                var objJson = JSON.parse(obj);
+	    		                var list = objJson.rtnList;
+	            				return {	            					
+	            						value: item.musicTitle,
+				                		label: item.musicTitle
+	            				}
+		                	})
+		                );
+		                
+		                /*for(var i=0; i<list.length; i++){
+		                	console.log(list[i]);
+		                	availableWord.push(list[i]);
+		                }
+		        		$("#schWord").autocomplete({
+		        			source: availableWord
+		        		});
+		                */
+		            }     
+				})
+			},
+			open: function() {
+	            $( this ).autocomplete("widget").width("323px");
+	            $( this ).removeClass( "ui-corner-all" ).addClass( "ui-corner-top" );
+	        }
+		})
+		.data('uiAutocomplete')._renderItem = function( ul, item ) {
+        return $( "<li style='cursor:hand; cursor:pointer;'></li>" )
+            .data( "item.autocomplete", item )
+            .append("<a onclick=\"cityValue('" + item.value + "');\">"  + unescape(item.label) + "</a>")
+        .appendTo( ul );
+	    };
+
+
+	});
 	
 	
 	function makeJsonString(){
@@ -72,15 +145,18 @@
          return jsonInfo;
 	}
 	</script>
+	<script type="text/javascript">
+
+</script>
+
 </head>
 <body>
-<h1>
-	Music title Completion
-</h1>
+	<h1>Music Title Search AutoCompletion</h1>	
+	<div class="ui-widget">
+		<label for="schWord">Title : </label>
+		<input id="schWord" type="text"/>
+	</div>
 
-<P>  Music Title Search Completion</P>
-
-<input id="schWord" type="text" onkeyup="searchCompletion()"/>
 
 </body>
 </html>

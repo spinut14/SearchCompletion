@@ -1,10 +1,8 @@
 package com.music.completion;
 
-import java.net.URLEncoder;
 import java.text.DateFormat;
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 
@@ -71,7 +69,7 @@ public class HomeController {
 //	}
 //	}
 	
-	@RequestMapping(value="/search", method = RequestMethod.POST)
+	@RequestMapping(value="/search", produces="application/json;charset=UTF-8", method = RequestMethod.POST)
 	public @ResponseBody String search(SearchVO inVO){
 		System.out.println(inVO.toString());
 		String rtnStr = "";
@@ -134,7 +132,6 @@ public class HomeController {
 	private String callElasticApi(String method, String url, Object obj, String jsonData) throws Exception {
 		String host = "13.125.238.20";
 		int port = 9200;
-		List<HashMap<String, Object>> rtnListMap = new ArrayList<HashMap<String, Object>>();
 		try{
             //엘라스틱서치에서 제공하는 response 객체
             Response response = null;
@@ -179,31 +176,56 @@ public class HomeController {
             System.out.println(jarr.size());
             JsonObject jHitData = null;
             JsonObject jData = null;
-            ResVO rtn = new ResVO();
-            List<String> list = new ArrayList<String>();
+            ResVO rtn = null;
+            List<ResVO> list = new ArrayList<ResVO>();
+            List<String> dupChkList = new ArrayList<String>();
+            
             for(int i=0; i<jarr.size(); i++) {
+            	rtn = new ResVO();
             	jHitData = jarr.get(i).getAsJsonObject();
             	jData = jHitData.getAsJsonObject("_source");
             	System.out.println(jData.get("musicTitle").getAsString());
-            	list.add(jData.get("musicTitle").getAsString());
-//            	
+            	dupChkList.add(jData.get("musicTitle").getAsString());
             }
             
-            rtn.setRtnList(list);
+            		// 2. 중복제거
+            List<String> uniqueList = this.removeDup(dupChkList);
+            
+            for(String str : uniqueList) {
+            	rtn = new ResVO();
+            	rtn.setMusicTitle(str);
+            	list.add(rtn);
+            }
+        	
             gson = new Gson();
-            String rtnStr = gson.toJson((Object)rtn);
+            String rtnStr = gson.toJson(list);
             System.out.println("rtnStr " + rtnStr);
             return rtnStr;
 
-            //AnalyzeResVO resVO = gson.fromJson(responseBody, AnalyzeResVO.class);
-            // System.out.println(resVO.toString());
-//            result.put("resultCode", statusCode);
-//            result.put("resultBody", responseBody);
         } catch (Exception e) {
-//            result.put("resultCode", -1);
-//            result.put("resultBody", e.toString());
         	e.printStackTrace();
         }
 		return null;
+	}
+	
+	
+	private List<String> removeDup(List<String> dataList) {
+		List<String> resultList = null;
+		int x = 0;
+		while(x < 1000) {
+			long starttime = System.nanoTime();
+			
+			resultList = new ArrayList<String>();
+			for(int i=0; i < dataList.size(); i++) {
+				if(!resultList.contains(dataList.get(i))) {
+					resultList.add(dataList.get(i));
+				}
+			}
+			long endtime = System.nanoTime();
+			long estimatedTime = endtime - starttime;
+			System.out.println(estimatedTime);
+			x++;
+		}
+		return resultList;
 	}
 }
