@@ -39,9 +39,9 @@ import com.music.completion.vo.TermVO;
  * Handles requests for the application home page.
  */
 @Controller
-public class HomeController {
+public class HomeCchController {
 	
-	private static final Logger logger = LoggerFactory.getLogger(HomeController.class);
+	private static final Logger logger = LoggerFactory.getLogger(HomeCchController.class);
 	
 	/**
 	 * Simply selects the home view to render by returning its name.
