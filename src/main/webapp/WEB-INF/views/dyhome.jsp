@@ -151,7 +151,7 @@
 
 </head>
 <body>
-	<h1>Music Title Search AutoCompletion</h1>	
+	<h1>Korean Dictionary AutoCompletion KDY</h1>	
 	<div class="ui-widget">
 		<label for="schWord">Title : </label>
 		<input id="schWord" type="text"/>
