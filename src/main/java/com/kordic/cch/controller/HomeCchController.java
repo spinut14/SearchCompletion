@@ -71,7 +71,7 @@ public class HomeCchController {
 	
 	@RequestMapping(value="/search", produces="application/json;charset=UTF-8", method = RequestMethod.POST)
 	public @ResponseBody String search(SearchVO inVO){
-		System.out.println(inVO.toString());
+//		System.out.println(inVO.toString());
 		String rtnStr = "";
 		String jsonStr = makeJsonStr(inVO.getSchWord());
 		
@@ -84,6 +84,14 @@ public class HomeCchController {
 	
 		return rtnStr;
 	}
+	
+	@RequestMapping(value="/main", produces="application/json;charset=UTF-8", method = RequestMethod.GET)
+	public String main(SearchVO inVO){
+		
+		return "cch/index";
+	}
+	
+	
 	
 	private String makeJsonStr(String schWord) {
 		TermVO termNg = new TermVO();
@@ -125,7 +133,7 @@ public class HomeCchController {
 		String jsonStr = gson.toJson(docVO);
 
 		
-		System.out.println(jsonStr);
+//		System.out.println(jsonStr);
 		return jsonStr;
 	}
 	
@@ -173,7 +181,7 @@ public class HomeCchController {
             .getAsJsonObject().get("hits");
             
             JsonArray jarr = rootObject.getAsJsonArray();
-            System.out.println(jarr.size());
+//            System.out.println(jarr.size());
             JsonObject jHitData = null;
             JsonObject jData = null;
             ResVO rtn = null;
@@ -223,7 +231,7 @@ public class HomeCchController {
 			}
 			long endtime = System.nanoTime();
 			long estimatedTime = endtime - starttime;
-			System.out.println(estimatedTime);
+//			System.out.println(estimatedTime);
 			x++;
 		}
 		return resultList;
