@@ -35,8 +35,8 @@ public class CallESServiceImpl implements CallESService {
 	@Override
 	public String searchKorDict(Object obj, String jsonData) {
 		String host = "52.78.51.15";
-//		String url = "dic_kor/_search";
-		String url = "music_title/_search";
+		String url = "dic_kor/_search";
+//		String url = "music_title/_search";
 		int port = 9200;
 		try{
             //엘라스틱서치에서 제공하는 response 객체
@@ -46,11 +46,10 @@ public class CallESServiceImpl implements CallESService {
             if(null != jsonData) {
             	jsonString = jsonData;
             }else {
-            	
             	gson = new Gson();
                 jsonString = gson.toJson(obj);
             }
-//            System.out.println("jsonString : " +jsonString);
+            System.out.println("jsonString : " +jsonString);
             RestClient restClient = RestClient.builder(
             	    new HttpHost(host, port, "http")).build();
             Request request = new Request("GET", url );
@@ -91,7 +90,7 @@ public class CallESServiceImpl implements CallESService {
             	jHitData = jarr.get(i).getAsJsonObject();
             	jData = jHitData.getAsJsonObject("_source");
 //            	System.out.println(jData.get("musicTitle").getAsString());
-            	dupChkList.add(jData.get("musicTitle").getAsString());
+            	dupChkList.add(jData.get("voca").getAsString());
             }
             
             		// 2. 중복제거
@@ -126,10 +125,16 @@ public class CallESServiceImpl implements CallESService {
 		TermVO termNgE = new TermVO();
 		TermVO termNgEb = new TermVO();
 		PrefixVO prefix = new PrefixVO();
-		termNg.setTitleNgram(schWord);
-		termNgE.setTitleNgramEdge(schWord);
-		termNgEb.setTitleNgramEdgeBack(schWord);
-		prefix.setTitle(schWord);
+//		termNg.setTitleNgram(schWord);
+//		termNgE.setTitleNgramEdge(schWord);
+//		termNgEb.setTitleNgramEdgeBack(schWord);
+		
+		termNg.setVocaNgram(schWord);
+		termNgE.setVocaNgramEdge(schWord);
+		termNgEb.setVocaNgramEdgeBack(schWord);
+		
+//		prefix.setTitle(schWord);
+		prefix.setVoca(schWord);
 		ShouldVO sdVO = null;
 		List<ShouldVO> shList = new ArrayList<ShouldVO>();
 		sdVO = new ShouldVO();
