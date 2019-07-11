@@ -16,7 +16,7 @@
 		var searchWord = document.getElementsByClassName("searchWord")[0].value;
 		
 		$.ajax({
-			url:"http://localhost:8080/completion/kdy/searchWord",
+			url:"/completion/kdy/searchWord",
 			data: { word: searchWord},
 			method: "POST",
 			dataType: "json"
