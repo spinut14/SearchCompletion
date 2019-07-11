@@ -27,9 +27,11 @@ public class ElasticsearchDAO {
 	public ElasticsearchDAO() {}
 
 	public List searchContext(String searchWord) {
-		httphost = new HttpHost("localhost", 9200, "http");
+		String url = "52.78.51.15";
+		String searchIndex = "dic_kor";
+		httphost = new HttpHost(url, 9200, "http");
 		restClient = RestClient.builder(httphost).build();
-		Request request = new Request("GET","/dic_korean/_search");
+		Request request = new Request("GET","/"+searchIndex+"/_search");
 		request.addParameter("pretty", "true");
 		Response response ;
 //		request.setEntity(new NStringEntity(makeJson(searchWord), ContentType.APPLICATION_JSON));
@@ -78,21 +80,36 @@ public class ElasticsearchDAO {
 	private String makeSearchJsonTemplate(String str,int number) {
 		String search = str;
 
-		String query = "{\n" + 
+//		String query = "{\n" + 
+//				"  \"query\": {\n" + 
+//				"    \"bool\": {\n" + 
+//				"      \"should\": [\n" + 
+//				"        {\n" + 
+//				"          \"term\": {\n" + 
+//				"            \"meaning\": \""+str+"\"\n" + 
+//				"          }\n" + 
+//				"        }\n" + 
+//				"      ]\n" + 
+//				"    }\n" + 
+//				"  },\"size\":"+number+"\n" + 
+//				"}";
+		String serverQuery = 
+				"{\n" + 
 				"  \"query\": {\n" + 
 				"    \"bool\": {\n" + 
 				"      \"should\": [\n" + 
 				"        {\n" + 
 				"          \"term\": {\n" + 
-				"            \"meaning\": \""+str+"\"\n" + 
+				"            \"vocaNgram\": \""+search+"\"\n" + 
 				"          }\n" + 
 				"        }\n" + 
 				"      ]\n" + 
 				"    }\n" + 
 				"  },\"size\":"+number+"\n" + 
-				"}";
+				"}\n" + 
+				"";
 				
-		return query;
+		return serverQuery;
 	}
 	
 }
