@@ -191,23 +191,11 @@
 </head>
 <body class="jui">
 
+	<label>Search Word</label><br/>
 	<input type="text" class="input" id="schWord" placeholder="단어를 입력해주세요"/>
 	<a class="btn" onclick="btnClick_e()">Search</a>
 	<br/><br/>
 	<div id="accordion_2" class="accordion">
-		<div class="title active">
-			Group Item #1 <i class="icon-arrow3"></i>
-		</div>
-		<div class="content">
-        The style components provide various options in addition to the basic functionality.
-        In addition, script components can be added, which facilitate the development of more diverse UI components.
-    	</div>
-		<div class="title">
-			Group Item #2 <i class="icon-arrow1"></i>
-		</div>
-		<div class="title">
-			Group Item #3 <i class="icon-arrow1"></i>
-		</div>
 	</div>
 </body>
 </html>

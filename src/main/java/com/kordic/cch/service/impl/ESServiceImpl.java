@@ -3,24 +3,20 @@ package com.kordic.cch.service.impl;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.apache.http.HttpHost;
-import org.apache.http.entity.ContentType;
-import org.apache.http.nio.entity.NStringEntity;
-import org.apache.http.util.EntityUtils;
-import org.elasticsearch.client.Request;
-import org.elasticsearch.client.Response;
-import org.elasticsearch.client.RestClient;
+import javax.annotation.Resource;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
+import com.fwk.es.CallESService;
 import com.google.gson.Gson;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import com.kordic.cch.controller.MainCchController;
-import com.kordic.cch.service.CallESService;
+import com.kordic.cch.service.ESService;
 import com.music.completion.vo.BoolVO;
 import com.music.completion.vo.DocVO;
 import com.music.completion.vo.PrefixVO;
@@ -29,21 +25,20 @@ import com.music.completion.vo.ResVO;
 import com.music.completion.vo.ShouldVO;
 import com.music.completion.vo.TermVO;
 
-@Service("CallESService")
-public class CallESServiceImpl implements CallESService {
+@Service("ESService")
+public class ESServiceImpl implements ESService {
 	private static final Logger logger = LoggerFactory.getLogger(MainCchController.class);
+	
+	@Resource(name="CallESService")
+	private CallESService caller;
+	
+	
 	/**
 	 * Call Elasticsearch API
 	 */
 	@Override
 	public String autoComplete(Object obj, String jsonData) {
-		String host = "52.78.51.15";
-		String url = "dic_kor/_search";
-//		String url = "music_title/_search";
-		int port = 9200;
 		try{
-            //엘라스틱서치에서 제공하는 response 객체
-            Response response = null;
             String jsonString;
             Gson gson = null;
             if(null != jsonData) {
@@ -56,35 +51,13 @@ public class CallESServiceImpl implements CallESService {
             	logger.info("jsonString["+jsonString+"]");
             }
             
-            RestClient restClient = RestClient.builder(
-            	    new HttpHost(host, port, "http")).build();
-            Request request = new Request("GET", url );
-            request.addParameter("pretty", "true");
-            request.setEntity(new NStringEntity(jsonString, ContentType.APPLICATION_JSON));
-            
-            response = restClient.performRequest(request);
-            
-            
-//            curl -XGET "http://localhost:9200/sch_lyrics/_analyze" -H 'Content-Type: application/json' -d'
-//            {
-//              "analyzer": "lyric_analyzer",
-//              "text" :"진정인"
-//            }'
-            //앨라스틱서치에서 리턴되는 응답코드를 받는다
-            int statusCode = response.getStatusLine().getStatusCode();
-//            System.out.println("status Code : " + statusCode);
-            //엘라스틱서치에서 리턴되는 응답메시지를 받는다
-            String responseBody = EntityUtils.toString(response.getEntity());
-//            System.out.println("response Body : " + responseBody);
-            
-            restClient.close();
+            String responseBody = caller.sendToEs(jsonString);
             JsonParser parser = new JsonParser();
             JsonElement rootObject = parser.parse(responseBody)
             .getAsJsonObject().get("hits")
             .getAsJsonObject().get("hits");
             
             JsonArray jarr = rootObject.getAsJsonArray();
-//            System.out.println(jarr.size());
             JsonObject jHitData = null;
             JsonObject jData = null;
             ResVO rtn = null;
@@ -95,7 +68,6 @@ public class CallESServiceImpl implements CallESService {
             	rtn = new ResVO();
             	jHitData = jarr.get(i).getAsJsonObject();
             	jData = jHitData.getAsJsonObject("_source");
-//            	System.out.println(jData.get("musicTitle").getAsString());
             	dupChkList.add(jData.get("voca").getAsString());
             }
             
@@ -121,13 +93,8 @@ public class CallESServiceImpl implements CallESService {
 	
 	@Override
 	public String searchKorDict(Object obj, String jsonData) {
-		String host = "52.78.51.15";
-		String url = "dic_kor/_search";
-//		String url = "music_title/_search";
-		int port = 9200;
+
 		try{
-            //엘라스틱서치에서 제공하는 response 객체
-            Response response = null;
             String jsonString;
             Gson gson = null;
             if(null != jsonData) {
@@ -136,41 +103,16 @@ public class CallESServiceImpl implements CallESService {
             	gson = new Gson();
                 jsonString = gson.toJson(obj);
             }
-            if(logger.isInfoEnabled()) {
-            	logger.info("jsonString["+jsonString+"]");
-            }
-            
-            RestClient restClient = RestClient.builder(
-            	    new HttpHost(host, port, "http")).build();
-            Request request = new Request("GET", url );
-            request.addParameter("pretty", "true");
-            request.setEntity(new NStringEntity(jsonString, ContentType.APPLICATION_JSON));
-            
-            response = restClient.performRequest(request);
-            
-            
-//            curl -XGET "http://localhost:9200/sch_lyrics/_analyze" -H 'Content-Type: application/json' -d'
-//            {
-//              "analyzer": "lyric_analyzer",
-//              "text" :"진정인"
-//            }'
-            //앨라스틱서치에서 리턴되는 응답코드를 받는다
-            int statusCode = response.getStatusLine().getStatusCode();
-//            System.out.println("status Code : " + statusCode);
-            //엘라스틱서치에서 리턴되는 응답메시지를 받는다
-            String responseBody = EntityUtils.toString(response.getEntity());
-//            System.out.println("response Body : " + responseBody);
+            String responseBody = caller.sendToEs(jsonString);
             if(logger.isInfoEnabled()) {
             	logger.info("responseBody["+responseBody+"]");
             }
-            restClient.close();
             JsonParser parser = new JsonParser();
             JsonElement rootObject = parser.parse(responseBody)
             .getAsJsonObject().get("hits")
             .getAsJsonObject().get("hits");
             
             JsonArray jarr = rootObject.getAsJsonArray();
-//            System.out.println(jarr.size());
             JsonObject jHitData = null;
             JsonObject jData = null;
             ResVO rtn = null;
@@ -181,7 +123,6 @@ public class CallESServiceImpl implements CallESService {
             	rtn = new ResVO();
             	jHitData = jarr.get(i).getAsJsonObject();
             	jData = jHitData.getAsJsonObject("_source");
-//            	System.out.println(jData.get("musicTitle").getAsString());
             	dupChkList.add(jData.get("voca").getAsString());
             	
             	rtn.set_id(jHitData.get("_id").getAsString());

@@ -1,6 +1,6 @@
 package com.kordic.cch.service;
 
-public interface CallESService {
+public interface ESService {
 
 	/**
 	 * Call Elasticsearch API

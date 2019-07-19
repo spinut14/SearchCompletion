@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import com.kordic.cch.service.CallESService;
+import com.kordic.cch.service.ESService;
 import com.music.completion.vo.SearchVO;
 
 /**
@@ -19,16 +19,16 @@ import com.music.completion.vo.SearchVO;
 public class MainCchController {
 	
 	private static final Logger logger = LoggerFactory.getLogger(MainCchController.class);
-	@Resource(name="CallESService")
-	private CallESService callESService;
+	@Resource(name="ESService")
+	private ESService eSService;
 	
 	@RequestMapping(value="/autoComplete", produces="application/json;charset=UTF-8", method = RequestMethod.POST)
 	public @ResponseBody String autoComplete(SearchVO inVO){
 		String rtnStr = "";
-		String jsonStr = callESService.makeJsonStr(inVO.getSchWord());
+		String jsonStr = eSService.makeJsonStr(inVO.getSchWord());
 		logger.info("/autoComplete");
 		try {
-			rtnStr = callESService.autoComplete(null, jsonStr);
+			rtnStr = eSService.autoComplete(null, jsonStr);
 			logger.info("/autocomplete Test rtnStr : " + rtnStr);
 		}catch(Exception e) {
 			e.printStackTrace();
@@ -39,17 +39,17 @@ public class MainCchController {
 	
 	@RequestMapping(value="/cch/main", produces="application/json;charset=UTF-8", method = RequestMethod.GET)
 	public String main(SearchVO inVO){
-		
+
 		return "cch/index2";
 	}
 	
 	@RequestMapping(value="/search", produces="application/json;charset=UTF-8", method = RequestMethod.POST)
 	public @ResponseBody String search(SearchVO inVO){
 		String rtnStr = "";
-		String jsonStr = callESService.makeJsonStr(inVO.getSchWord());
+		String jsonStr = eSService.makeJsonStr(inVO.getSchWord());
 		logger.info("/search");
 		try {
-			rtnStr = callESService.searchKorDict(null, jsonStr);
+			rtnStr = eSService.searchKorDict(null, jsonStr);
 			logger.info("/search Test rtnStr : " + rtnStr);
 		}catch(Exception e) {
 			e.printStackTrace();
