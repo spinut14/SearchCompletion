@@ -4,7 +4,16 @@ public interface CallESService {
 
 	/**
 	 * Call Elasticsearch API
-	 * inquiry Json Data
+	 * Word AutoComplete
+	 * @param obj
+	 * @param jsonData
+	 * @return
+	 */
+	public String autoComplete(Object obj, String jsonData);
+	
+	/**
+	 * Call Elasticsearch API
+	 * Search Korean Word
 	 * @param obj
 	 * @param jsonData
 	 * @return

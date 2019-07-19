@@ -8,7 +8,14 @@
 			<property name="LOG_LEVEL" value="${log.mac.level}"/>
 		</then>
 		<else>
-			<property name="LOG_LEVEL" value="${log.level}"/>
+			<if condition='property("spring.profiles.active").equals("lin")' >
+				<then>
+					<property name="LOG_LEVEL" value="${log.lin.level}"/>
+				</then>
+				<else>
+					<property name="LOG_LEVEL" value="${log.aws.level}"/>
+				</else>
+			</if>
 		</else>
 	</if>
 	
@@ -18,7 +25,14 @@
 			<property name="LOG_DIR" value="${log.mac.dir}"/>
 		</then>
 		<else>
-			<property name="LOG_DIR" value="${log.aws.dir" />
+			<if condition='property("spring.profiles.active").equals("lin")' >
+				<then>
+					<property name="LOG_DIR" value="${log.lin.dir}" />
+				</then>
+				<else>
+					<property name="LOG_DIR" value="${log.aws.dir}" />
+				</else>
+			</if>		
 		</else>
 	</if>
 	
