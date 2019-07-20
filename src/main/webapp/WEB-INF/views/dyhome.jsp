@@ -12,7 +12,6 @@
 <script>
 	
  var getWords = function(){
-		console.log("test");
 		var searchWord = document.getElementsByClassName("searchWord")[0].value;
 		
 		$.ajax({
@@ -23,8 +22,30 @@
 		})
 		.done(function(json){
 			console.log(json);
+			printWord(json);
 		})
-	} 	
+	}
+ 
+ function printWord(json){
+	 console.log("printWord",json)
+ 	 var list = document.getElementById('word');
+	
+	 console.log('remove Elemenets',list.childElementCount);
+ 	 var listCount = list.childElementCount;
+	 for(var i=0;i<listCount;i++){
+		 list.removeChild(list.firstElementChild);
+		 console.log("remove Eleemnt",list.firstElementChild);
+	 }
+ 
+	 
+	 
+	 json.data.forEach( function(result){
+		 console.log("count");
+		 var resultWord = document.createElement('ul');
+		 resultWord.innerHTML = "<li>"+result.voca+" : "+ result.isNative +" : "+ result.meaning+":"+result.partOfSpeech+"</li>"
+		 document.getElementById('word').appendChild(resultWord);	 
+	 })
+ }
 
 </script>
 
@@ -36,7 +57,8 @@
 		<input class="searchWord" type="text" placeholder="input Word"/>
 		<Button onclick = "getWords();">Search</Button>
 	</div>
-
+	<div id='word'>
+	</div>
 
 </body>
 </html>

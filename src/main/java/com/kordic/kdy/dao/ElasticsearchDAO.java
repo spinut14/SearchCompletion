@@ -34,16 +34,13 @@ public class ElasticsearchDAO {
 		Request request = new Request("GET","/"+searchIndex+"/_search");
 		request.addParameter("pretty", "true");
 		Response response ;
-//		request.setEntity(new NStringEntity(makeJson(searchWord), ContentType.APPLICATION_JSON));
 		request.setJsonEntity(makeSearchJsonTemplate(searchWord,5));
-//		System.out.println(makeSearchJsonTemplate(searchWord));
 		try {
 			response = restClient.performRequest(request);
 			int statusCode = response.getStatusLine().getStatusCode();
             System.out.println("status Code : " + statusCode);
             String responseBody = EntityUtils.toString(response.getEntity());
             System.out.println("response Body : " + responseBody);
-            
             
             return makeResultList(responseBody);
 		} catch (IOException e) {

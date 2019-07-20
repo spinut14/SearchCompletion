@@ -92,10 +92,10 @@ public class HomeKDYController {
 
 		List searchList = searchService.getSearchContext(searchWord);
 		
-		Word wd = new Word();
-		wd.setCategory("category");
-		wd.setVoca("voca");
-		wd.setMeaning("meaning");
+//		Word wd = new Word();
+//		wd.setCategory("category");
+//		wd.setVoca("voca");
+//		wd.setMeaning("meaning");
 		Map data = new HashMap<String,List>();
 		data.put("data", searchList);
 		
