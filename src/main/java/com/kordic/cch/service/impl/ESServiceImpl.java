@@ -47,8 +47,8 @@ public class ESServiceImpl implements ESService {
             	gson = new Gson();
                 jsonString = gson.toJson(obj);
             }
-            if(logger.isInfoEnabled()) {
-            	logger.info("jsonString["+jsonString+"]");
+            if(logger.isDebugEnabled()) {
+            	logger.debug("jsonString["+jsonString+"]");
             }
             
             String responseBody = caller.sendToEs(jsonString);
@@ -104,8 +104,8 @@ public class ESServiceImpl implements ESService {
                 jsonString = gson.toJson(obj);
             }
             String responseBody = caller.sendToEs(jsonString);
-            if(logger.isInfoEnabled()) {
-            	logger.info("responseBody["+responseBody+"]");
+            if(logger.isDebugEnabled()) {
+            	logger.debug("responseBody["+responseBody+"]");
             }
             JsonParser parser = new JsonParser();
             JsonElement rootObject = parser.parse(responseBody)

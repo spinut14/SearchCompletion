@@ -100,6 +100,16 @@
 	/*****************************
 	 * Body Onload 
 	 *****************************/
+	function bodyLoad(){
+		$(document).ready(function(){
+			$('#schWord').keyup(function(event){
+				if(event.which == 13){
+					btnClick_e();
+				}
+			});
+		});
+	} 
+	
 	function loadIdx() {
 		
 		var div; //= document.createElement('div');
@@ -178,14 +188,9 @@
 				// console.log(data);
 				// typeof 객체와 기본타입 구분
 				// instanceof 어떤 클래스의 인스턴스인지 알기 위함 (연산자 필요 return -> true/false)
-				console.log(typeof data);
 				var str = JSON.stringify(data);			// Object -> String
 				var jsonObj = JSON.parse(str);			// String -> JSONObject
 				
-				console.log(typeof str);
-				console.log(typeof jsonObj);
-				console.log(jsonObj.length);
-				console.log(jsonObj[1]);
 				rtnArray = jsonObj;
 				loadIdx();
 				// console.log(jsonObj instanceof JSON);
@@ -199,7 +204,7 @@
 </script>
 
 </head>
-<body class="jui">
+<body class="jui" onload="bodyLoad()">
 
 	<label>Search Word</label><br/>
 	<input type="text" class="input" id="schWord" placeholder="단어를 입력해주세요"/>

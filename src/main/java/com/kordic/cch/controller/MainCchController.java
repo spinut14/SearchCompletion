@@ -27,15 +27,13 @@ public class MainCchController {
 	public @ResponseBody String autoComplete(@RequestBody SearchVO inVO){
 		String rtnStr = "";
 		 String jsonStr = eSService.makeJsonStr(inVO.getSchWord());
-		logger.info("/autoComplete");
+		logger.info("autoComplete"+inVO.getSchWord());
 		
-		
-	// kafka
-		
-		// logic
 		try {
 			rtnStr = eSService.autoComplete(null, jsonStr);
-			logger.info("/autocomplete Test rtnStr : " + rtnStr);
+			if(logger.isDebugEnabled()) {
+				logger.debug("/autocomplete Test rtnStr : " + rtnStr);
+			}
 		}catch(Exception e) {
 			e.printStackTrace();
 		}
@@ -53,10 +51,12 @@ public class MainCchController {
 	public @ResponseBody String search(@RequestBody SearchVO inVO){
 		String rtnStr = "";
 		String jsonStr = eSService.makeJsonStr(inVO.getSchWord());
-		logger.info("/search");
+		logger.info("search:"+inVO.getSchWord());
 		try {
 			rtnStr = eSService.searchKorDict(null, jsonStr);
-			logger.info("/search Test rtnStr : " + rtnStr);
+			if(logger.isDebugEnabled()) {
+				logger.debug("/search Test rtnStr : " + rtnStr);
+			}
 		}catch(Exception e) {
 			e.printStackTrace();
 		}

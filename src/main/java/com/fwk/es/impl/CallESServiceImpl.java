@@ -35,20 +35,20 @@ public class CallESServiceImpl implements CallESService {
 	private String pathInf;
 	private String portStrInf;
 	private int portInf;
-	
+
 	@Override
 	public String sendToEs(String jsonStr) throws IOException, Exception{
 		// TODO Auto-generated method stub
 		RestClient restClient = null;		
-		
+
 		try{
 			this.setESEnv();
 			//엘라스틱서치에서 제공하는 response 객체
 			Response response = null;
-			if(logger.isInfoEnabled()) {
-				logger.info("jsonString ["+jsonStr+"] ");
+			if(logger.isDebugEnabled()) {
+				logger.debug("jsonString ["+jsonStr+"] ");
 			}
-			
+
 			restClient = RestClient.builder(
 					new HttpHost(hostInf, portInf, "http")).build();
 			Request request = new Request("GET", pathInf );
@@ -68,11 +68,11 @@ public class CallESServiceImpl implements CallESService {
 
 			restClient.close();
 
-			
+
 			return responseBody;
 		}catch(IOException ioe) {
 			logger.error(ioe.getMessage());
-			
+
 			throw ioe;
 		}catch(Exception e) {
 			logger.error(e.getMessage());
@@ -81,21 +81,24 @@ public class CallESServiceImpl implements CallESService {
 			restClient.close();
 		}
 	}
-	
+
 	private void setESEnv() {
-			logger.info("setESEnv");
-		    hostInf = new String(Base64.decodeBase64(host));
-	        pathInf = new String(Base64.decodeBase64(path));
-	        portStrInf = new String(Base64.decodeBase64(port));
-	        if(null == portStrInf) {
-	        	portInf = 9200;
-	        }else {
-	        	portInf = Integer.parseInt(portStrInf);
-	        }
-	        if(logger.isDebugEnabled()) {
-		        logger.debug("host ["+host+"] ");
-		        logger.debug("path ["+path+"] ");
-		        logger.debug("portInf ["+portInf+"] ");
-	        }
+
+		if(logger.isDebugEnabled()) {
+			logger.debug("setESEnv");
+		}
+		hostInf = new String(Base64.decodeBase64(host));
+		pathInf = new String(Base64.decodeBase64(path));
+		portStrInf = new String(Base64.decodeBase64(port));
+		if(null == portStrInf) {
+			portInf = 9200;
+		}else {
+			portInf = Integer.parseInt(portStrInf);
+		}
+		if(logger.isDebugEnabled()) {
+			logger.debug("host ["+host+"] ");
+			logger.debug("path ["+path+"] ");
+			logger.debug("portInf ["+portInf+"] ");
+		}
 	}
 }
