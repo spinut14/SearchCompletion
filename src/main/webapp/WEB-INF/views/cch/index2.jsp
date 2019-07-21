@@ -64,14 +64,17 @@
 
 	}); */
 	
+	
 	$(function() {
+		
 		$("#schWord").autocomplete({
 			source : function(request, response) {
 				$.ajax({
 					url : '/completion/autoComplete',
 					type : 'POST',
 					dataType : 'json',
-					data : "schWord=" + $('#schWord').val(),
+					contentType: 'application/json',
+					data : getJsonData(),
 					success : function(data) 
 								{response($.map(data,function(item) {
 									var obj = JSON.stringify(data);
@@ -86,7 +89,13 @@
 		})
 	});
 	
-	
+	function getJsonData(){
+		var jsonQuery = {
+				"schWord":$('#schWord').val()
+		}
+		console.log(jsonQuery);
+		return JSON.stringify(jsonQuery);
+	}
 	
 	/*****************************
 	 * Body Onload 

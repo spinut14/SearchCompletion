@@ -5,6 +5,7 @@ import javax.annotation.Resource;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -23,10 +24,15 @@ public class MainCchController {
 	private ESService eSService;
 	
 	@RequestMapping(value="/autoComplete", produces="application/json;charset=UTF-8", method = RequestMethod.POST)
-	public @ResponseBody String autoComplete(SearchVO inVO){
+	public @ResponseBody String autoComplete(@RequestBody SearchVO inVO){
 		String rtnStr = "";
-		String jsonStr = eSService.makeJsonStr(inVO.getSchWord());
+		 String jsonStr = eSService.makeJsonStr(inVO.getSchWord());
 		logger.info("/autoComplete");
+		
+		
+	// kafka
+		
+		// logic
 		try {
 			rtnStr = eSService.autoComplete(null, jsonStr);
 			logger.info("/autocomplete Test rtnStr : " + rtnStr);
@@ -44,7 +50,7 @@ public class MainCchController {
 	}
 	
 	@RequestMapping(value="/search", produces="application/json;charset=UTF-8", method = RequestMethod.POST)
-	public @ResponseBody String search(SearchVO inVO){
+	public @ResponseBody String search(@RequestBody SearchVO inVO){
 		String rtnStr = "";
 		String jsonStr = eSService.makeJsonStr(inVO.getSchWord());
 		logger.info("/search");
