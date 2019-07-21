@@ -162,7 +162,8 @@
 			url : '/completion/search',
 			type : 'POST',
 			dataType : 'json',
-			data : "schWord=" + $('#schWord').val(),
+			contentType: 'application/json',
+			data : getJsonData(),
 			success : 
 				function(data) {
 				/*response($.map(data, function(item) {
