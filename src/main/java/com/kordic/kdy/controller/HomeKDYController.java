@@ -86,16 +86,13 @@ public class HomeKDYController {
 	 *TODO : parameter vo 객체로 변환하기 
 	 */
 	@RequestMapping(value="/kdy/searchWord", produces="application/json;charset=UTF-8",method = RequestMethod.POST)
-	public @ResponseBody Map<String, List> searchDictionary( SearchWord word) {		
+	public @ResponseBody Map<String, List> searchDictionary( SearchWord word) throws Exception {		
 		//@ResponseBody를 붙여주면 
 		String searchWord = word.getWord();
-
+		//kafka producer로 전송
+		logger.info("Search Word: "+ searchWord);
 		List searchList = searchService.getSearchContext(searchWord);
 		
-//		Word wd = new Word();
-//		wd.setCategory("category");
-//		wd.setVoca("voca");
-//		wd.setMeaning("meaning");
 		Map data = new HashMap<String,List>();
 		data.put("data", searchList);
 		

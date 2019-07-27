@@ -13,7 +13,7 @@ public class SearchService {
 	@Autowired
 	ElasticsearchDAO edao;
 
-	public List getSearchContext(String str) {
+	public List getSearchContext(String str) throws Exception {
 		List list= edao.searchContext(str);
 		return list;
 	}
