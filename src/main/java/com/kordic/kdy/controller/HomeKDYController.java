@@ -1,47 +1,24 @@
 package com.kordic.kdy.controller;
 
-import java.net.URLDecoder;
 import java.text.DateFormat;
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
+import java.util.Random;
 
-import org.apache.http.HttpHost;
-import org.apache.http.entity.ContentType;
-import org.apache.http.nio.entity.NStringEntity;
-import org.apache.http.util.EntityUtils;
-import org.elasticsearch.client.Request;
-import org.elasticsearch.client.Response;
-import org.elasticsearch.client.RestClient;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import com.google.gson.Gson;
-import com.google.gson.JsonArray;
-import com.google.gson.JsonElement;
-import com.google.gson.JsonObject;
-import com.google.gson.JsonParser;
 import com.kordic.kdy.service.SearchService;
 import com.kordic.kdy.vo.SearchWord;
-import com.kordic.kdy.vo.Word;
-import com.music.completion.vo.BoolVO;
-import com.music.completion.vo.DocVO;
-import com.music.completion.vo.PrefixVO;
-import com.music.completion.vo.QueryVO;
-import com.music.completion.vo.ResVO;
-import com.music.completion.vo.SearchVO;
-import com.music.completion.vo.ShouldVO;
-import com.music.completion.vo.TermVO;
 
 /**
  * Handles requests for the application home page.
@@ -89,8 +66,12 @@ public class HomeKDYController {
 	public @ResponseBody Map<String, List> searchDictionary( SearchWord word) throws Exception {		
 		//@ResponseBody를 붙여주면 
 		String searchWord = word.getWord();
-		//kafka producer로 전송
-		logger.info("Search Word: "+ searchWord);
+		//user id 생성
+		int userId = new Random().nextInt(10);
+		
+		
+		//logfile 생성
+		logger.info("Search Word: "+ searchWord +", userID:"+userId);
 		List searchList = searchService.getSearchContext(searchWord);
 		
 		Map data = new HashMap<String,List>();
@@ -98,6 +79,7 @@ public class HomeKDYController {
 		
 		return data;
 	}
+	
 	
 
 }

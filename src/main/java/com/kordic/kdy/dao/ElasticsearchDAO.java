@@ -33,21 +33,14 @@ public class ElasticsearchDAO {
 	public ElasticsearchDAO() {}
 
 	public List searchContext(String searchWord) throws Exception {
-//		String url = "52.78.51.15";
-//		String searchIndex = "dic_kor";
-//		httphost = new HttpHost(url, 9200, "http");
-//		restClient = RestClient.builder(httphost).build();
-//		Request request = new Request("GET","/"+searchIndex+"/_search");
-//		request.addParameter("pretty", "true");
-//		Response response ;
-//		request.setJsonEntity(makeSearchJsonTemplate(searchWord,5));
+
 		
-		System.out.println("make Query : "+makeSearchJsonTemplate(searchWord,5));
+//		System.out.println("make Query : "+makeSearchJsonTemplate(searchWord,5));
 		try {
             
             String responseBody = caller.sendToEs(makeSearchJsonTemplate(searchWord,5));
             
-            System.out.println("response Body : " + responseBody);
+//            System.out.println("response Body : " + responseBody);
             
             return makeResultList(responseBody);
 		} catch (IOException e) {
@@ -66,13 +59,13 @@ public class ElasticsearchDAO {
 		JsonElement hits = element.getAsJsonObject().get("hits").getAsJsonObject();
 		JsonElement result= hits.getAsJsonObject().get("hits").getAsJsonArray();
 		
-		System.out.println("result : "+result);
+//		System.out.println("result : "+result);
 		
 		for(int i=0;i<result.getAsJsonArray().size();i++) {
 			Gson gson = new Gson();
 			Word wd = gson.fromJson(result.getAsJsonArray().get(i).getAsJsonObject().get("_source").toString(),Word.class); 
 			
-			System.out.println("category : "+wd.getCategory());
+//			System.out.println("category : "+wd.getCategory());
 			sl.addSearchWord(wd);
 		}
 //		System.out.println(result.getAsJsonArray().get(0).getAsJsonObject().get("_source"));
