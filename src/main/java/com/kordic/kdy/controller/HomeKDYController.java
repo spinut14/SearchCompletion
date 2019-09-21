@@ -32,7 +32,11 @@ public class HomeKDYController {
 	
 
 	@Autowired
-	SearchService searchService;
+	private SearchService searchService;
+	
+//	public HomeKDYController(SearchService searchService) {
+//		this.searchService = searchService;
+//	}
 	
 	/**
 	 * Simply selects the home view to render by returning its name.
@@ -68,7 +72,6 @@ public class HomeKDYController {
 		String searchWord = word.getWord();
 		//user id 생성
 		int userId = new Random().nextInt(10);
-		
 		
 		//logfile 생성
 		logger.info("Search Word: "+ searchWord +", userID:"+userId);
