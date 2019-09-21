@@ -1,5 +1,8 @@
 package com.kordic.cch.controller;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
 import javax.annotation.Resource;
 
 import org.slf4j.Logger;
@@ -51,7 +54,10 @@ public class MainCchController {
 	public @ResponseBody String search(@RequestBody SearchVO inVO){
 		String rtnStr = "";
 		String jsonStr = eSService.makeJsonStr(inVO.getSchWord());
-		logger.info("search:"+inVO.getSchWord());
+		Date time = new Date();
+		SimpleDateFormat fmt = new SimpleDateFormat("yyyyMMddHHmmss");
+		
+		logger.info("search:"+inVO.getSchWord() + "timestamp:"+fmt.format(time));
 		try {
 			rtnStr = eSService.searchKorDict(null, jsonStr);
 			if(logger.isDebugEnabled()) {
