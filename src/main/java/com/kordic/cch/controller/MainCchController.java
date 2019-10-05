@@ -61,7 +61,7 @@ public class MainCchController {
 		Date time = new Date();
 		SimpleDateFormat fmt = new SimpleDateFormat("yyyyMMddHHmmss");
 		
-		logger.info(MainCchController.SEARCH_WD, "search["+inVO.getSchWord() + "] timestamp:["+fmt.format(time) +"]");
+		logger.info(MainCchController.SEARCH_WD, "search["+inVO.getSchWord() + "] timestamp["+fmt.format(time) +"]");
 		try {
 			rtnStr = eSService.searchKorDict(null, jsonStr);
 			if(logger.isDebugEnabled()) {
