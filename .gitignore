@@ -1,8 +1,8 @@
-./target/m2e-wtp/web-resources/META-INF/maven/com.music/completion/pom.properties
 
 ### STS ###
 .settings
 .project
 .classpath
 
+### target ###
 target/
