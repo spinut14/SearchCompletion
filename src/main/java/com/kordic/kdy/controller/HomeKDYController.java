@@ -1,6 +1,7 @@
 package com.kordic.kdy.controller;
 
 import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -32,7 +33,11 @@ public class HomeKDYController {
 	
 
 	@Autowired
-	SearchService searchService;
+	private SearchService searchService;
+	
+//	public HomeKDYController(SearchService searchService) {
+//		this.searchService = searchService;
+//	}
 	
 	/**
 	 * Simply selects the home view to render by returning its name.
@@ -69,9 +74,12 @@ public class HomeKDYController {
 		//user id 생성
 		int userId = new Random().nextInt(10);
 		
-		
 		//logfile 생성
-		logger.info("Search Word: "+ searchWord +", userID:"+userId);
+		Date time = new Date();
+		SimpleDateFormat fmt = new SimpleDateFormat("yyyyMMddHHmmss");
+		
+//		logger.info("search:"+searchWord + "timestamp:"+fmt.format(time));
+		logger.info(searchWord);
 		List searchList = searchService.getSearchContext(searchWord);
 		
 		Map data = new HashMap<String,List>();

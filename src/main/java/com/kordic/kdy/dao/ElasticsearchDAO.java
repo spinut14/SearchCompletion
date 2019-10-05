@@ -77,37 +77,37 @@ public class ElasticsearchDAO {
 	private String makeSearchJsonTemplate(String str,int number) {
 		String search = str;
 
-		String query = "{\n" + 
-				"  \"query\": {\n" + 
-				"    \"bool\": {\n" + 
-				"      \"should\": [\n" + 
-				"        {\n" + 
-				"          \"term\": {\n" + 
-				"            \"voca\": \""+search+"\"\n" + 
-				"          }\n" + 
-				"        }\n" + 
-				"      ]\n" + 
-				"    }\n" + 
-				"  },\"size\":"+number+"\n" + 
-				"}";
-		return query;
-//		String serverQuery = 
-//				"{\n" + 
+//		String query = "{\n" + 
 //				"  \"query\": {\n" + 
 //				"    \"bool\": {\n" + 
 //				"      \"should\": [\n" + 
 //				"        {\n" + 
 //				"          \"term\": {\n" + 
-//				"            \"vocaNgram\": \""+search+"\"\n" + 
+//				"            \"voca\": \""+search+"\"\n" + 
 //				"          }\n" + 
 //				"        }\n" + 
 //				"      ]\n" + 
 //				"    }\n" + 
 //				"  },\"size\":"+number+"\n" + 
-//				"}\n" + 
-//				"";
+//				"}";
+//		return query;
+		String serverQuery = 
+				"{\n" + 
+				"  \"query\": {\n" + 
+				"    \"bool\": {\n" + 
+				"      \"should\": [\n" + 
+				"        {\n" + 
+				"          \"term\": {\n" + 
+				"            \"vocaNgram\": \""+search+"\"\n" + 
+				"          }\n" + 
+				"        }\n" + 
+				"      ]\n" + 
+				"    }\n" + 
+				"  },\"size\":"+number+"\n" + 
+				"}\n" + 
+				"";
 				
-//		return serverQuery;
+		return serverQuery;
 	}
 	
 }
