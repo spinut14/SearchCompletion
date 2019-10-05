@@ -7,6 +7,8 @@ import javax.annotation.Resource;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.slf4j.Marker;
+import org.slf4j.MarkerFactory;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -23,6 +25,8 @@ import com.music.completion.vo.SearchVO;
 public class MainCchController {
 	
 	private static final Logger logger = LoggerFactory.getLogger(MainCchController.class);
+	private static Marker SEARCH_WD = MarkerFactory.getMarker("SEARCH_WD");
+	
 	@Resource(name="ESService")
 	private ESService eSService;
 	
@@ -57,7 +61,7 @@ public class MainCchController {
 		Date time = new Date();
 		SimpleDateFormat fmt = new SimpleDateFormat("yyyyMMddHHmmss");
 		
-		logger.info("search:"+inVO.getSchWord() + "timestamp:"+fmt.format(time));
+		logger.info(MainCchController.SEARCH_WD, "search["+inVO.getSchWord() + "] timestamp:["+fmt.format(time) +"]");
 		try {
 			rtnStr = eSService.searchKorDict(null, jsonStr);
 			if(logger.isDebugEnabled()) {

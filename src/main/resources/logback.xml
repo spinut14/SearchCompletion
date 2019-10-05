@@ -74,12 +74,47 @@
 		</rollingPolicy>
 	</appender>
 	
+	<!-- 검색어 로그파일 :본 로그파일은 검색어만 적재되는 로그파일임 -->
+	<appender name="searchLogAppender" class="ch.qos.logback.core.rolling.RollingFileAppender">
+		<file>${LOG_DIR}/SearchWd.log</file>
+		<filter class="ch.qos.logback.core.filter.EvaluatorFilter"> 
+			<evaluator class="ch.qos.logback.classic.boolex.OnMarkerEvaluator"> 
+				<marker>SEARCH_WD</marker> 
+			</evaluator> 
+			<OnMatch>ACCEPT</OnMatch>
+            <OnMismatch>DENY</OnMismatch>
+		</filter> 
+		<encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
+			<Pattern>
+				%d[%thread]%-5level %logger{16} - %msg%n
+			</Pattern>
+		</encoder>
+		
+		<!--로그를 남기는 파일의 용량이 10KB가 넘으면 이를 압축 파일로 만들고 새로 로그 파일로 만들라는 정책 -->
+		<triggeringPolicy class="ch.qos.logback.core.rolling.SizeBasedTriggeringPolicy">
+			<MaxFileSize>100MB</MaxFileSize>
+		</triggeringPolicy>
+	
+		<!-- 파일 덮어쓰는 정책 -->
+		<rollingPolicy class="ch.qos.logback.core.rolling.FixedWindowRollingPolicy">
+			<FileNamePattern>logs/Spring_log.%i.log2.zip</FileNamePattern>
+			<!-- 
+				MinIndex가 1이고 MaxIndex가 10이므로 위의 파일 이름 패턴에 따라 아래의 로그 파일이 생길것이다.
+				logexample2.1.log.zip logexample2.2.log.zip
+				 상태에서파일 크기가 10KB가 넘으면 logexample2.1.log.zip이 된다
+			 -->
+			 <MinIndex>1</MinIndex>
+			 <MaxIndex>10</MaxIndex>
+		</rollingPolicy>
+	</appender>
+	
 	<!-- 해당 패키지의 로그들만 console, file Appender 방법으로 로그를 남긴다. 
 		TRACE > DEBUG > INFO > WARN > ERROR
 	-->
 	<logger name="com.kordic" level="${LOG_LEVEL}" additivity="false">
 		<appender-ref ref="fileAppender" />
 		<appender-ref ref="consoleAppender" />
+		<appender-ref ref="searchLogAppender" />
 	</logger>
 	
 	<root level="${LOG_LEVEL}">
