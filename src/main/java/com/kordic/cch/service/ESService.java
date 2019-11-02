@@ -26,4 +26,13 @@ public interface ESService {
 	 * @return
 	 */
 	public String makeJsonStr(String schWord);
+	
+	
+	/**
+	 * getTopSearch Data
+	 * @param obj
+	 * @param jsonData
+	 * @return
+	 */
+	public String getTopSearch();
 }

@@ -199,18 +199,76 @@
 		});
 	}
 
-	
-	
 </script>
 
 </head>
 <body class="jui" onload="bodyLoad()">
-
 	<label>Search Word</label><br/>
 	<input type="text" class="input" id="schWord" placeholder="단어를 입력해주세요"/>
 	<a class="btn" onclick="btnClick_e()">Search</a>
+	
 	<br/><br/>
 	<div id="accordion_2" class="accordion">
 	</div>
+	<div id="topSearch">
+		<h2>Top Search</h2>
+		<span id="list"></span>
+	</div>	
 </body>
+<script>
+
+var list = document.getElementById("topSearch");
+console.log(list);
+setInterval(getTopSearch, 5000);
+ 
+/*getTopSearch();*/
+		
+function getTopSearch(){
+	console.log("execute");
+				$.ajax({
+			url : '/completion/getTopSearch',
+			type : 'POST',
+			dataType : 'json',
+			contentType: 'application/json',
+			data : getJsonData(),
+			success : 
+				function(data) {
+				/*response($.map(data, function(item) {
+					var obj = JSON.stringify(data);
+					var objJson = JSON.parse(obj);
+					var list = objJson.rtnList;
+					return {
+						value : item.musicTitle,
+						label : item.musicTitle
+					}
+				}));*/
+				// console.log(data);
+				// typeof 객체와 기본타입 구분
+				// instanceof 어떤 클래스의 인스턴스인지 알기 위함 (연산자 필요 return -> true/false)
+				var str = JSON.stringify(data);			// Object -> String
+				var jsonObj = JSON.parse(str);			// String -> JSONObject
+				
+				rtnArray = jsonObj;
+				
+				console.log(jsonObj);
+				setListData(jsonObj);
+			} 
+			
+		});
+	}
+
+function setListData(jsonObj){
+	console.log(jsonObj.length);
+	console.log(jsonObj[0]);
+	var i=1;
+	for(var j=0; j<jsonObj.length; j++){
+		list.innerHTML = list.innerHTML + i + " ["+ jsonObj[j].topKey + " : " + jsonObj[j].topCnt + "]<br/>";
+		i++;
+		
+	}
+	
+}
+
+
+</script>
 </html>

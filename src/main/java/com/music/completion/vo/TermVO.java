@@ -8,6 +8,8 @@ public class TermVO {
 	private String vocaNgram;
 	private String vocaNgramEdge;
 	private String vocaNgramEdgeBack;
+	
+	private String field;
 
 	public String getTitleNgram() {
 		return titleNgram;
@@ -45,5 +47,10 @@ public class TermVO {
 	public void setVocaNgramEdgeBack(String vocaNgramEdgeBack) {
 		this.vocaNgramEdgeBack = vocaNgramEdgeBack;
 	}
-	
+	public String getField() {
+		return field;
+	}
+	public void setField(String field) {
+		this.field = field;
+	}
 }

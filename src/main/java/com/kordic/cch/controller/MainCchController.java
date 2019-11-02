@@ -74,4 +74,21 @@ public class MainCchController {
 		return rtnStr;
 	}
 	
+	@RequestMapping(value="/getTopSearch", produces="application/json;charset=UTF-8", method = RequestMethod.POST)
+	public @ResponseBody String getTopSearch(@RequestBody SearchVO inVO){
+		String rtnStr = "";
+		String jsonStr = eSService.getTopSearch();
+		
+		try {
+//			rtnStr = eSService.searchKorDict(null, jsonStr);
+			if(logger.isDebugEnabled()) {
+				logger.debug("/search Test rtnStr : " + rtnStr);
+			}
+		}catch(Exception e) {
+			e.printStackTrace();
+		}
+	
+		return jsonStr;
+	}
+	
 }

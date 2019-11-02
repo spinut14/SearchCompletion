@@ -9,6 +9,12 @@ public class ResVO {
 	private String _id;
 	private String _index;
 	private String _type;
+	
+	
+	// 실시간 검색어
+	private String topKey;
+	private int topCnt;
+	
 
 	public String getMusicTitle() {
 		return musicTitle;
@@ -73,4 +79,20 @@ public class ResVO {
 		this._type = _type;
 	}
 
+	public String getTopKey() {
+		return topKey;
+	}
+
+	public void setTopKey(String topKey) {
+		this.topKey = topKey;
+	}
+
+	public int getTopCnt() {
+		return topCnt;
+	}
+
+	public void setTopCnt(int topCnt) {
+		this.topCnt = topCnt;
+	}
+	
 }

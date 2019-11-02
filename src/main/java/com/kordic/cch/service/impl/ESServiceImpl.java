@@ -1,6 +1,8 @@
 package com.kordic.cch.service.impl;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
 
 import javax.annotation.Resource;
@@ -17,13 +19,18 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import com.kordic.cch.controller.MainCchController;
 import com.kordic.cch.service.ESService;
+import com.music.completion.vo.AggsVO;
 import com.music.completion.vo.BoolVO;
 import com.music.completion.vo.DocVO;
 import com.music.completion.vo.PrefixVO;
 import com.music.completion.vo.QueryVO;
+import com.music.completion.vo.RangeVO;
+import com.music.completion.vo.ReqDtVO;
 import com.music.completion.vo.ResVO;
+import com.music.completion.vo.SearchVO;
 import com.music.completion.vo.ShouldVO;
 import com.music.completion.vo.TermVO;
+import com.music.completion.vo.Top_5_word;
 
 @Service("ESService")
 public class ESServiceImpl implements ESService {
@@ -220,5 +227,77 @@ public class ESServiceImpl implements ESService {
 			x++;
 		}
 		return resultList;
+	}
+	
+	public String getTopSearch() {
+		
+		SearchVO schVO = new SearchVO();
+		ReqDtVO reqdt = new ReqDtVO();
+		RangeVO range = new RangeVO();
+		QueryVO query = new QueryVO();
+		query.setRange(range);
+		range.setReqdt(reqdt);
+		
+		
+		// 최근 20초
+		SimpleDateFormat fm = new SimpleDateFormat("yyyyMMddhhmmss");
+		Calendar cal = Calendar.getInstance();
+		String curTm = fm.format(cal.getTime());
+		cal.add(Calendar.SECOND, -10);
+		String bfTm = fm.format(cal.getTime());
+		System.out.println("Time cch : " + bfTm + " - " + curTm);
+		reqdt.setGte(curTm);
+		reqdt.setLte(bfTm);
+		schVO.setSize(0);
+		schVO.setQuery(query);
+		
+		AggsVO aggsVO = new AggsVO();
+		TermVO termVO = new TermVO();
+		termVO.setField("searchWd");
+		Top_5_word top_5_word = new Top_5_word();
+		top_5_word.setTerms(termVO);
+		aggsVO.setTop_5_word(top_5_word);
+		schVO.setAggs(aggsVO);
+		
+		Gson gson = new Gson();
+		String jsonString = gson.toJson(schVO);
+		
+		logger.info("cchlogger jsonString: " + jsonString);
+		
+		try{
+            String responseBody = caller.sendToEs(jsonString);
+            if(logger.isDebugEnabled()) {
+            	logger.debug("responseBody["+responseBody+"]");
+            }
+            JsonParser parser = new JsonParser();
+            JsonElement rootObject = parser.parse(responseBody)
+            .getAsJsonObject().get("aggregations")
+            .getAsJsonObject().get("top_5_word")
+            .getAsJsonObject().get("buckets");
+            
+            JsonArray jarr = rootObject.getAsJsonArray();
+            JsonObject jHitData = null;
+            ResVO rtn = null;
+            List<ResVO> list = new ArrayList<ResVO>();
+            
+            for(int i=0; i<jarr.size(); i++) {
+            	rtn = new ResVO();
+            	jHitData = jarr.get(i).getAsJsonObject();
+            	System.out.println("key : " +jHitData);
+            	rtn.setTopKey(jHitData.get("key").getAsString());
+            	rtn.setTopCnt(jHitData.get("doc_count").getAsInt());
+            	
+            	list.add(rtn);
+            }
+            
+            gson = new Gson();
+            String rtnStr = gson.toJson(list);
+            return rtnStr;
+
+        } catch (Exception e) {
+        	e.printStackTrace();
+        }
+		return null;
+		
 	}
 }
