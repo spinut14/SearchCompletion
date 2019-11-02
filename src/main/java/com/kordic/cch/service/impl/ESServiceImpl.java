@@ -243,7 +243,7 @@ public class ESServiceImpl implements ESService {
 		SimpleDateFormat fm = new SimpleDateFormat("yyyyMMddhhmmss");
 		Calendar cal = Calendar.getInstance();
 		String curTm = fm.format(cal.getTime());
-		cal.add(Calendar.SECOND, -10);
+		cal.add(Calendar.MINUTE, -10);
 		String bfTm = fm.format(cal.getTime());
 		System.out.println("Time cch : " + bfTm + " - " + curTm);
 		reqdt.setGte(curTm);
