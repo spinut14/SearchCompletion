@@ -27,6 +27,9 @@ public class CallESServiceImpl implements CallESService {
 
 	@Value("${es.path}")
 	private String path;
+	
+	@Value("${es.path2}")
+	private String path2;
 
 	@Value("${es.port}")
 	private String port;
@@ -52,7 +55,7 @@ public class CallESServiceImpl implements CallESService {
 			restClient = RestClient.builder(
 					new HttpHost(hostInf, portInf, "http")).build();
 			Request request = new Request("GET", pathInf );
-			request.addParameter("pretty", "true");
+//			request.addParameter("pretty", "true");
 			request.setEntity(new NStringEntity(jsonStr, ContentType.APPLICATION_JSON));
 
 			response = restClient.performRequest(request);
@@ -61,7 +64,7 @@ public class CallESServiceImpl implements CallESService {
 			//앨라스틱서치에서 리턴되는 응답코드를 받는다
 			int statusCode = response.getStatusLine().getStatusCode();
 			if(logger.isDebugEnabled()) {
-				logger.debug("statusCode" + statusCode);
+				logger.debug("cho statusCode" + statusCode);
 			}
 			//엘라스틱서치에서 리턴되는 응답메시지를 받는다
 			String responseBody = EntityUtils.toString(response.getEntity());
@@ -88,7 +91,7 @@ public class CallESServiceImpl implements CallESService {
 			logger.debug("setESEnv");
 		}
 		hostInf = new String(Base64.decodeBase64(host));
-		pathInf = new String(Base64.decodeBase64(path));
+		pathInf = new String(Base64.decodeBase64(path2));
 		portStrInf = new String(Base64.decodeBase64(port));
 		if(null == portStrInf) {
 			portInf = 9200;
@@ -96,9 +99,9 @@ public class CallESServiceImpl implements CallESService {
 			portInf = Integer.parseInt(portStrInf);
 		}
 		if(logger.isDebugEnabled()) {
-			logger.debug("host ["+host+"] ");
-			logger.debug("path ["+path+"] ");
-			logger.debug("portInf ["+portInf+"] ");
+			logger.debug("host ["+hostInf+"] ");
+			logger.debug("path ["+pathInf+"] ");
+			logger.debug("portInf ["+portStrInf+"] ");
 		}
 	}
 }
