@@ -246,8 +246,8 @@ public class ESServiceImpl implements ESService {
 		cal.add(Calendar.MINUTE, -10);
 		String bfTm = fm.format(cal.getTime());
 		System.out.println("Time cch : " + bfTm + " - " + curTm);
-		reqdt.setGte(curTm);
-		reqdt.setLte(bfTm);
+		reqdt.setGte(bfTm);
+		reqdt.setLte(curTm);
 		schVO.setSize(0);
 		schVO.setQuery(query);
 		
