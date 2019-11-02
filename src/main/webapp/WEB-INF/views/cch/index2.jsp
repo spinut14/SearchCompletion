@@ -210,8 +210,8 @@
 	<br/><br/>
 	<div id="accordion_2" class="accordion">
 	</div>
+	<h2>Top Search</h2>
 	<div id="topSearch">
-		<h2>Top Search</h2>
 		<span id="list"></span>
 	</div>	
 </body>
@@ -224,6 +224,7 @@ setInterval(getTopSearch, 5000);
 /*getTopSearch();*/
 		
 function getTopSearch(){
+	list.innerHTML = "";
 	console.log("execute");
 				$.ajax({
 			url : '/completion/getTopSearch',

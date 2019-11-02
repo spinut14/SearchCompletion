@@ -245,7 +245,6 @@ public class ESServiceImpl implements ESService {
 		String curTm = fm.format(cal.getTime());
 		cal.add(Calendar.MINUTE, -10);
 		String bfTm = fm.format(cal.getTime());
-		System.out.println("Time cch : " + bfTm + " - " + curTm);
 		reqdt.setGte(bfTm);
 		reqdt.setLte(curTm);
 		schVO.setSize(0);
@@ -262,7 +261,7 @@ public class ESServiceImpl implements ESService {
 		Gson gson = new Gson();
 		String jsonString = gson.toJson(schVO);
 		
-		logger.info("cchlogger jsonString: " + jsonString);
+//		logger.info("cchlogger jsonString: " + jsonString);
 		
 		try{
             String responseBody = caller.sendToEs(jsonString);
